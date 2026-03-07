@@ -17,7 +17,7 @@ const formSchema = z.object({
     }),
     github_link: z.string().url({ message: "Invalid URL" }).optional().or(z.literal("")),
     live_link: z.string().url({ message: "Invalid URL" }).optional().or(z.literal("")),
-    images: z.string().optional(),
+    images: z.array(z.string()).optional(),
     featured: z.boolean().default(false).optional(),
 });
 
@@ -32,10 +32,15 @@ export default function EditProjectPage() {
                 const res = await fetch(`/api/projects/${id}`);
                 if (res.ok) {
                     const data = await res.json();
+                    const project = data.data.project;
                     setInitialData({
-                        ...data.data.project,
-                        tech_stack: data.data.project.tech_stack.join(", "),
-                        images: data.data.project.images.join(", "),
+                        title: project.title,
+                        description: project.description,
+                        tech_stack: project.tech_stack.join(", "),
+                        github_link: project.github_link || "",
+                        live_link: project.live_link || "",
+                        featured: project.featured || false,
+                        images: Array.isArray(project.images) ? project.images : [],
                     });
                 } else {
                     console.error("Failed to fetch project");

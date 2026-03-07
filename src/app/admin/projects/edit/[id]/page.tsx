@@ -32,9 +32,11 @@ export default function EditProjectPage() {
                 const res = await fetch(`/api/projects/${id}`);
                 if (res.ok) {
                     const data = await res.json();
+                    const project = data.data.project;
                     setInitialData({
-                        ...data.data.project,
-                        tech_stack: data.data.project.tech_stack.join(", "),
+                        ...project,
+                        tech_stack: project.tech_stack.join(", "),
+                        images: Array.isArray(project.images) ? project.images : [],
                     });
                 } else {
                     console.error("Failed to fetch project");

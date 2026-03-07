@@ -33,6 +33,7 @@ const formSchema = z.object({
   github_link: z.string().url({ message: "Invalid URL" }).optional().or(z.literal("")),
   live_link: z.string().url({ message: "Invalid URL" }).optional().or(z.literal("")),
   featured: z.boolean().default(false).optional(),
+  images: z.array(z.string()).optional(),
 });
 
 interface ProjectFormProps {
